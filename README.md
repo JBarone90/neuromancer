@@ -1,42 +1,37 @@
-# sv
+# neuromancer
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Jacopo Barone's personal website. Home for projects and, possibly, blog-style articles. Statically prerendered and deployed to GitHub Pages.
 
-## Creating a project
+## Stack
 
-If you're seeing this, you've probably already done this step. Congrats!
+- SvelteKit 2 + Svelte 5 (runes mode)
+- `@sveltejs/adapter-static` — full prerender to plain files
+- TypeScript, Vite
+- GitHub Pages via GitHub Actions
 
-```sh
-# create a new project
-npx sv create my-app
-```
-
-To recreate this project with the same configuration:
+## Commands
 
 ```sh
-# recreate this project
-npx sv@0.15.3 create --template minimal --types ts --install npm _jb_scaffold
+npm run dev       # local dev server
+npm run build     # production build to build/
+npm run preview   # serve the production build at localhost:4173
+npm run check     # type + Svelte diagnostics
 ```
 
-## Developing
+Always run `npm run build` and fix any errors before committing — a build failure breaks the deploy.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Deploy
 
-```sh
-npm run dev
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds the site with `BASE_PATH=/jb-website` and uploads the `build/` directory to GitHub Pages.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+## Project structure
+
+```text
+src/routes/     pages (file-based routing)
+src/lib/        reusable components and content data
+static/         assets served verbatim (favicon, .nojekyll)
 ```
 
-## Building
+## Roadmap
 
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+See `PROJECT_PLAN.md`.

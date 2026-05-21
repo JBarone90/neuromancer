@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 <!-- Keep this file lean: it loads in full at the start of EVERY session. -->
 <!-- Detailed, situational guidance lives in .claude/rules/ and only loads when relevant files are touched. -->
 
-Personal portfolio site. Built with SvelteKit, statically prerendered, deployed to GitHub Pages.
+Personal website (neuromancer). Built with SvelteKit, statically prerendered, deployed to GitHub Pages. Hosts projects and, possibly, blog-style articles.
 
 The Svelte MCP server is configured — see `.claude/rules/svelte.md` for tool usage instructions (`list-sections`, `get-documentation`, `svelte-autofixer`, `playground-link`).
 
@@ -28,7 +28,22 @@ The Svelte MCP server is configured — see `.claude/rules/svelte.md` for tool u
 - **Minimal iterations.** One small, self-contained change at a time. Don't scaffold features we haven't reached in PROJECT_PLAN.md.
 - **Build before commit.** Always run `npm run build` locally and fix errors before committing. The deploy is static, so build failures = broken site.
 - **Deploy works already.** The GitHub Actions pipeline is set up. Don't touch `.github/workflows/` or deploy config unless explicitly asked.
-- Commit messages: short, imperative ("add hero section", not "added hero section").
+- **Commit messages.**
+  - Use short, imperative messages (`add hero section`, not `added hero section`)
+  - Prefix every commit with a type:
+    - `feat:` new features
+    - `fix:` bug fixes
+    - `refactor:` code restructuring
+    - `docs:` documentation
+    - `chore:` maintenance/config/tooling
+    - `style:` formatting/styling only
+    - `test:` tests
+  - Examples:
+    - `feat: add hero section`
+    - `fix: prevent navbar overflow`
+    - `chore: update favicon assets`
+  - Keep commit titles concise and lowercase
+  - No trailing period
 - Don't add dependencies without flagging why. Prefer the platform (CSS, Svelte built-ins) over libraries.
 
 ## Repo map
