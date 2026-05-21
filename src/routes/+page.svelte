@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { base } from '$app/paths';
+	import ProjectCard from '$lib/components/ProjectCard.svelte';
+	import { projects } from '$lib/content/projects';
 </script>
 
 <svelte:head>
@@ -44,9 +45,20 @@
 		</p>
 	</div>
 
-	<a href="{base}/projects/" class="dib ba b--theme-border pv2 ph3 f6 theme-muted cta-link anim-3" style="align-self: flex-start;">
+	<a href="#projects" class="dib ba b--theme-border pv2 ph3 f6 theme-muted cta-link anim-3" style="align-self: flex-start;">
 		View projects →
 	</a>
+</section>
+
+<section id="projects" class="flex flex-column" style="gap: 2rem; padding-top: 5rem; padding-bottom: 3rem;">
+	<h2 class="f3 fw6 ma0 font-mono">
+		<span class="theme-muted" aria-hidden="true">// </span>projects
+	</h2>
+	<div class="projects-grid">
+		{#each projects as project (project.title)}
+			<ProjectCard {project} />
+		{/each}
+	</div>
 </section>
 
 <style>
@@ -68,4 +80,10 @@
 	.social-icon-link:hover { opacity: 0.75; }
 	.cta-link { transition: color 0.2s ease, border-color 0.2s ease; }
 	.cta-link:hover { color: var(--color-text); border-color: var(--color-accent); }
+
+	.projects-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: 1.5rem;
+	}
 </style>

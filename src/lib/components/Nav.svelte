@@ -2,11 +2,9 @@
 	import { page } from '$app/state';
 	import { base } from '$app/paths';
 
-	const navLinks = [
-		{ label: 'Home', href: '/' },
-		{ label: 'Projects', href: '/projects/' },
-		{ label: 'Blog', href: '/blog/' },
-		{ label: 'About', href: '/about/' },
+	const navLinks: { label: string; href: string; anchor: boolean }[] = [
+		{ label: 'Home', href: '/', anchor: false },
+		{ label: 'Projects', href: '#projects', anchor: true },
 	];
 </script>
 
@@ -17,9 +15,9 @@
 			{#each navLinks as link (link.href)}
 				<li class="ml4">
 					<a
-						href="{base}{link.href}"
+						href={link.anchor ? link.href : `${base}${link.href}`}
 						class="theme-muted f6 no-underline nav-link"
-						class:nav-active={page.url.pathname === base + link.href}
+						class:nav-active={!link.anchor && page.url.pathname === base + link.href}
 					>{link.label}</a>
 				</li>
 			{/each}
