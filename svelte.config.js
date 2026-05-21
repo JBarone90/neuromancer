@@ -11,6 +11,13 @@ const config = {
 		adapter: adapter(),
 		paths: {
 			base: process.env.BASE_PATH || ''
+		},
+		prerender: {
+			handleHttpError: ({ path, message }) => {
+				// Ignore 404s for pages planned but not yet created
+				if (['/projects', '/blog', '/about'].includes(path)) return;
+				throw new Error(message);
+			}
 		}
 	}
 };
