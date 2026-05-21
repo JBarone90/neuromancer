@@ -20,10 +20,6 @@ npm run check     # type + Svelte diagnostics
 
 Always run `npm run build` and fix any errors before committing — a build failure breaks the deploy.
 
-## Deploy
-
-Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds the site with `BASE_PATH=/jb-website` and uploads the `build/` directory to GitHub Pages.
-
 ## Project structure
 
 ```text
@@ -31,7 +27,3 @@ src/routes/     pages (file-based routing)
 src/lib/        reusable components and content data
 static/         assets served verbatim (favicon, .nojekyll)
 ```
-
-## Roadmap
-
-See `PROJECT_PLAN.md`.
