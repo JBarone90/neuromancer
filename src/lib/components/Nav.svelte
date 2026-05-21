@@ -10,18 +10,17 @@
 	];
 </script>
 
-<nav>
-	<div class="container inner">
-		<a class="site-name" href="{base}/">neuromancer</a>
-		<ul class="nav-links">
+<nav class="fixed top-0 left-0 right-0 z-999 bg-surface bb b--theme-border nav-h flex items-center">
+	<div class="mw7 center ph4 w-100 flex items-center justify-between">
+		<a class="font-mono theme-accent f4 fw6 no-underline" href="{base}/">neuromancer</a>
+		<ul class="list pl0 ma0 dn flex-ns items-center">
 			{#each navLinks as link (link.href)}
-				<li>
+				<li class="ml4">
 					<a
 						href="{base}{link.href}"
-						class:active={page.url.pathname === base + link.href}
-					>
-						{link.label}
-					</a>
+						class="theme-muted f6 no-underline nav-link"
+						class:nav-active={page.url.pathname === base + link.href}
+					>{link.label}</a>
 				</li>
 			{/each}
 		</ul>
@@ -29,57 +28,7 @@
 </nav>
 
 <style>
-	nav {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		height: var(--nav-height);
-		background-color: var(--color-surface);
-		border-bottom: 1px solid var(--color-border);
-		z-index: 100;
-		display: flex;
-		align-items: center;
-	}
-
-	.inner {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	.site-name {
-		font-family: var(--font-mono);
-		color: var(--color-accent);
-		font-size: var(--font-size-lg);
-		font-weight: 600;
-		letter-spacing: -0.02em;
-	}
-
-	.nav-links {
-		list-style: none;
-		display: flex;
-		gap: var(--space-6);
-		align-items: center;
-	}
-
-	.nav-links a {
-		color: var(--color-text-muted);
-		font-size: var(--font-size-sm);
-		transition: color 0.15s ease;
-	}
-
-	.nav-links a:hover {
-		color: var(--color-text);
-	}
-
-	.nav-links a.active {
-		color: var(--color-accent);
-	}
-
-	@media (max-width: 640px) {
-		.nav-links {
-			display: none;
-		}
-	}
+	.nav-link { transition: color 0.15s ease; }
+	.nav-link:hover { color: var(--color-accent); }
+	.nav-active { color: var(--color-accent); }
 </style>

@@ -2,15 +2,15 @@
 	const year = new Date().getFullYear();
 </script>
 
-<footer>
-	<div class="container footer-inner">
-		<p>&copy; {year} Jacopo Barone</p>
-		<div class="social">
+<footer class="bt b--theme-border">
+	<div class="mw7 center ph4 pv4 flex items-center justify-between">
+		<p class="theme-muted f6 ma0">&copy; {year} Jacopo Barone</p>
+		<div class="flex items-center">
 			<a
 				href="https://github.com/JBarone90"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="social-link"
+				class="theme-muted social-link flex items-center mr3"
 				aria-label="GitHub"
 			>
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
@@ -21,7 +21,7 @@
 				href="https://scholar.google.it/citations?user=6qfEIzIAAAAJ&hl=en"
 				target="_blank"
 				rel="noopener noreferrer"
-				class="social-link"
+				class="theme-muted social-link flex items-center"
 				aria-label="Google Scholar"
 			>
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
@@ -33,36 +33,6 @@
 </footer>
 
 <style>
-	footer {
-		border-top: 1px solid var(--color-border);
-		padding-block: var(--space-6);
-	}
-
-	.footer-inner {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-
-	p {
-		color: var(--color-text-muted);
-		font-size: var(--font-size-sm);
-		margin: 0;
-	}
-
-	.social {
-		display: flex;
-		gap: var(--space-3);
-	}
-
-	.social-link {
-		color: var(--color-text-muted);
-		display: flex;
-		align-items: center;
-		transition: color 0.2s ease;
-	}
-
-	.social-link:hover {
-		color: var(--color-accent);
-	}
+	.social-link { transition: color 0.2s ease; }
+	.social-link:hover { color: var(--color-accent); }
 </style>

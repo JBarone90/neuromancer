@@ -1,4 +1,5 @@
 <script lang="ts">
+	import 'tachyons/css/tachyons.css';
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import Nav from '$lib/components/Nav.svelte';
@@ -12,14 +13,7 @@
 </svelte:head>
 
 <Nav />
-<main class="container">
+<main class="mw7 center ph4 w-100 flex-auto pt-nav">
 	{@render children()}
 </main>
 <Footer />
-
-<style>
-	main {
-		padding-top: calc(var(--nav-height) + var(--space-8));
-		flex: 1;
-	}
-</style>
