@@ -59,9 +59,13 @@ The deploy workflow lives at `.github/workflows/deploy.yml`. **Do not touch it**
 
 ## Verify before committing
 
-```bash
-npm run build   # must produce build/ with no errors
-npm run preview # spot-check at localhost:4173
+Always build with `BASE_PATH` set — this replicates CI exactly and catches prerender failures that plain `npm run build` misses:
+
+```powershell
+$env:BASE_PATH='/neuromancer'; npm run build
+npm run preview   # spot-check at localhost:4173
 ```
+
+Plain `npm run build` (no BASE_PATH) passes even when CI fails, because SvelteKit embeds the base path into prerendered HTML. Any link or path that works at `/foo` locally may break as `/neuromancer/foo` on CI.
 
 A build failure = broken deploy. Always fix build errors locally before pushing.
