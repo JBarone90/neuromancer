@@ -59,6 +59,7 @@ The Svelte MCP server is configured — see `.claude/rules/svelte.md` for tool u
 
 - This file = always-on, project-wide facts only.
 - `@.claude/rules/svelte.md` = front-end conventions; **auto-loads only when editing Svelte/TS files.**
+- `@.claude/rules/frontend-aesthetics.md` = design quality guidance; **auto-loads only when editing Svelte/TS files.**
 - Don't restate rule-file content here — that would defeat the point of keeping context lean.
 
 ## Don'ts
