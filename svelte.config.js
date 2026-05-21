@@ -14,8 +14,8 @@ const config = {
 		},
 		prerender: {
 			handleHttpError: ({ path, message }) => {
-				// Ignore 404s for pages planned but not yet created
-				if (['/projects', '/projects/', '/blog', '/blog/', '/about', '/about/'].includes(path)) return;
+				// Ignore 404s for pages not yet created; match by suffix so it works with any base path
+				if (/\/(projects|blog|about)\/?$/.test(path)) return;
 				throw new Error(message);
 			}
 		}
