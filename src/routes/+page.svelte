@@ -7,11 +7,11 @@
 </svelte:head>
 
 <section class="flex flex-column" style="gap: 3rem;">
-	<h1 class="f1 fw7 lh-title ma0" style="font-size: clamp(2.5rem, 5vw, 3rem);">
+	<h1 class="f1 fw7 lh-title ma0 anim-1" style="font-size: clamp(2.5rem, 5vw, 3rem);">
 		Jacopo Barone - Data Scientist
 	</h1>
 
-	<div class="flex flex-column mw6" style="gap: 1rem;">
+	<div class="flex flex-column mw6 anim-2" style="gap: 1rem;">
 		<p class="f4 theme-muted ma0 lh-copy">
 			I'm a Data Scientist working for the UK government, currently focused on
 			containerised trade.
@@ -44,12 +44,21 @@
 		</p>
 	</div>
 
-	<a href="{base}/projects/" class="dib ba b--theme-border pv2 ph3 f6 theme-muted cta-link" style="align-self: flex-start;">
+	<a href="{base}/projects/" class="dib ba b--theme-border pv2 ph3 f6 theme-muted cta-link anim-3" style="align-self: flex-start;">
 		View projects →
 	</a>
 </section>
 
 <style>
+	@keyframes fadeUp {
+		from { opacity: 0; transform: translateY(20px); }
+		to   { opacity: 1; transform: translateY(0); }
+	}
+
+	.anim-1 { animation: fadeUp 0.5s cubic-bezier(0.33, 1, 0.68, 1) 0.1s both; }
+	.anim-2 { animation: fadeUp 0.5s cubic-bezier(0.33, 1, 0.68, 1) 0.25s both; }
+	.anim-3 { animation: fadeUp 0.5s cubic-bezier(0.33, 1, 0.68, 1) 0.4s both; }
+
 	.social-icon-link {
 		display: inline-flex;
 		align-items: center;
