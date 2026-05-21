@@ -45,6 +45,7 @@ The Svelte MCP server is configured — see `.claude/rules/svelte.md` for tool u
   - Keep commit titles concise and lowercase
   - No trailing period
 - Don't add dependencies without flagging why. Prefer the platform (CSS, Svelte built-ins) over libraries.
+- **CSS: use Tachyons.** Tachyons is the preferred styling approach — utility classes directly in markup. Don't introduce other CSS frameworks.
 
 ## Repo map
 
