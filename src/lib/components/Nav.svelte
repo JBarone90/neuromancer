@@ -1,23 +1,24 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { base } from '$app/paths';
 
 	const navLinks = [
 		{ label: 'Home', href: '/' },
-		{ label: 'Projects', href: '/projects' },
-		{ label: 'Blog', href: '/blog' },
-		{ label: 'About', href: '/about' },
+		{ label: 'Projects', href: '/projects/' },
+		{ label: 'Blog', href: '/blog/' },
+		{ label: 'About', href: '/about/' },
 	];
 </script>
 
 <nav>
 	<div class="container inner">
-		<a class="site-name" href="/">neuromancer</a>
+		<a class="site-name" href="{base}/">neuromancer</a>
 		<ul class="nav-links">
 			{#each navLinks as link (link.href)}
 				<li>
 					<a
-						href={link.href}
-						class:active={page.url.pathname === link.href}
+						href="{base}{link.href}"
+						class:active={page.url.pathname === base + link.href}
 					>
 						{link.label}
 					</a>
