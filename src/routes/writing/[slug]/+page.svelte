@@ -48,6 +48,8 @@
 	.back-link { transition: color 0.15s ease; }
 	.back-link:hover { color: var(--color-accent); }
 
+	.prose { user-select: text; }
+
 	/* Prose styles for mdsvex-rendered markdown */
 	.prose :global(p) {
 		margin: 0 0 1.25rem;

@@ -10,6 +10,7 @@
 }
 
 html {
+	cursor: default;
 	font-family: 'IBM Plex Mono', monospace;
 	background-color: var(--color-bg);
 	background-image:
@@ -26,6 +27,7 @@ body {
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
+	user-select: none;
 }
 
 a {

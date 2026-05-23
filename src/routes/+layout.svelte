@@ -13,7 +13,7 @@
 </svelte:head>
 
 <Nav />
-<main class="mw7 center ph4 w-100 flex-auto pt-nav">
+<main class="mw8 center ph4 w-100 flex-auto pt-nav">
 	{@render children()}
 </main>
 <Footer />

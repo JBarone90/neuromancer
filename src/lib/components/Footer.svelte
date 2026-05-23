@@ -3,7 +3,7 @@
 </script>
 
 <footer class="bt b--theme-border">
-	<div class="mw7 center ph4 pv4 flex items-center justify-between">
+	<div class="mw8 center ph4 pv4 flex items-center justify-between">
 		<p class="theme-muted f6 ma0">&copy; {year} Jacopo Barone</p>
 		<div class="flex items-center">
 			<a
@@ -35,4 +35,15 @@
 <style>
 	.social-link { transition: color 0.2s ease; }
 	.social-link:hover { color: var(--color-accent); }
+
+	.social-link svg {
+		width: 1.125rem;
+		height: 1.125rem;
+	}
+	@media screen and (min-width: 30em) {
+		.social-link svg { width: 1.25rem; height: 1.25rem; }
+	}
+	@media screen and (min-width: 60em) {
+		.social-link svg { width: 1.375rem; height: 1.375rem; }
+	}
 </style>
