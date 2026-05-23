@@ -2,24 +2,24 @@
   import ProjectCard from "$lib/components/ProjectCard.svelte";
   import { projects } from "$lib/content/projects";
   import gsap from "gsap";
-  import { SplitText } from "gsap/SplitText";
+  import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 
-  gsap.registerPlugin(SplitText);
+  gsap.registerPlugin(ScrambleTextPlugin);
 
   function animateHero(node: HTMLElement) {
     const mm = gsap.matchMedia();
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       const ctx = gsap.context(() => {
-        const split = SplitText.create("#hero-name", {
-          type: "chars",
-          aria: "none",
-        });
         const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-        tl.from(
-          split.chars,
-          { opacity: 0, y: 10, stagger: 0.03, duration: 0.3 },
+        tl.to(
+          "#hero-name-text",
+          {
+            duration: 1.5,
+            scrambleText: { text: "Jacopo Barone", chars: "01", speed: 0.3 },
+          },
           0.1,
         )
+          .from("#hero-subtitle", { opacity: 0, duration: 0.3 }, "-=0.1")
           .from("#hero-bio", { opacity: 0, y: 8, duration: 0.5 }, "-=0.1")
           .from("#hero-cta", { opacity: 0, y: 6, duration: 0.4 }, "-=0.25");
       }, node);
@@ -56,8 +56,10 @@
     style="font-size: clamp(2.5rem, 5vw, 3rem);"
     aria-label="Jacopo Barone - Data Scientist"
   >
-    Jacopo Barone <br />
-    <span class="db nowrap" style="font-size: 0.55em;">Data Scientist</span>
+    <span id="hero-name-text">Jacopo Barone</span><br />
+    <span id="hero-subtitle" class="db nowrap" style="font-size: 0.55em;"
+      >Data Scientist<span class="cursor" aria-hidden="true">|</span></span
+    >
   </h1>
 
   <div id="hero-bio" class="flex flex-column mw6" style="gap: 1rem;">
@@ -145,5 +147,28 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
+  }
+
+  .cursor {
+    display: inline-block;
+    margin-left: 2px;
+    color: var(--color-accent);
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor {
+      animation: none;
+    }
   }
 </style>
