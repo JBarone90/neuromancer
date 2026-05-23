@@ -1,6 +1,25 @@
 <script lang="ts">
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import { projects } from '$lib/content/projects';
+	import gsap from 'gsap';
+	import { SplitText } from 'gsap/SplitText';
+
+	gsap.registerPlugin(SplitText);
+
+	function animateHero(node: HTMLElement) {
+		const mm = gsap.matchMedia();
+		mm.add('(prefers-reduced-motion: no-preference)', () => {
+			const ctx = gsap.context(() => {
+				const split = SplitText.create('#hero-name', { type: 'chars', aria: 'none' });
+				const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+				tl.from(split.chars, { opacity: 0, y: 10, stagger: 0.03, duration: 0.3 }, 0.1)
+					.from('#hero-bio', { opacity: 0, y: 8, duration: 0.5 }, '-=0.1')
+					.from('#hero-cta', { opacity: 0, y: 6, duration: 0.4 }, '-=0.25');
+			}, node);
+			return () => ctx.revert();
+		});
+		return () => mm.revert();
+	}
 </script>
 
 <svelte:head>
@@ -14,12 +33,17 @@
 	<meta name="twitter:description" content="Data Scientist working for the UK government, focused on containerised trade. Background in cognitive neuroscience and PhD in neuroimaging." />
 </svelte:head>
 
-<section class="flex flex-column" style="gap: 3rem;">
-	<h1 class="f1 fw7 lh-title ma0 anim-1" style="font-size: clamp(2.5rem, 5vw, 3rem);">
+<section class="flex flex-column" style="gap: 3rem;" {@attach animateHero}>
+	<h1
+		id="hero-name"
+		class="f1 fw7 lh-title ma0"
+		style="font-size: clamp(2.5rem, 5vw, 3rem);"
+		aria-label="Jacopo Barone - Data Scientist"
+	>
 		Jacopo Barone - Data Scientist
 	</h1>
 
-	<div class="flex flex-column mw6 anim-2" style="gap: 1rem;">
+	<div id="hero-bio" class="flex flex-column mw6" style="gap: 1rem;">
 		<p class="f4 theme-muted ma0 lh-copy">
 			I'm a Data Scientist working for the UK government, currently focused on
 			containerised trade.
@@ -52,7 +76,7 @@
 		</p>
 	</div>
 
-	<a href="#projects" class="dib ba b--theme-border pv2 ph3 f6 theme-muted cta-link anim-3" style="align-self: flex-start;">
+	<a id="hero-cta" href="#projects" class="dib ba b--theme-border pv2 ph3 f6 theme-muted cta-link" style="align-self: flex-start;">
 		View projects →
 	</a>
 </section>
@@ -69,16 +93,7 @@
 </section>
 
 <style>
-	@keyframes fadeUp {
-		from { opacity: 0; transform: translateY(20px); }
-		to   { opacity: 1; transform: translateY(0); }
-	}
-
-	.anim-1 { animation: fadeUp 0.5s cubic-bezier(0.33, 1, 0.68, 1) 0.1s both; }
-	.anim-2 { animation: fadeUp 0.5s cubic-bezier(0.33, 1, 0.68, 1) 0.25s both; }
-	.anim-3 { animation: fadeUp 0.5s cubic-bezier(0.33, 1, 0.68, 1) 0.4s both; }
-
-	.social-icon-link {
+.social-icon-link {
 		display: inline-flex;
 		align-items: center;
 		color: var(--color-accent);
