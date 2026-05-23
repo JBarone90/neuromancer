@@ -57,7 +57,7 @@
     aria-label="Jacopo Barone - Data Scientist"
   >
     Jacopo Barone <br />
-    <span class="db ml3 nowrap">Data Scientist</span>
+    <span class="db nowrap" style="font-size: 0.55em;">Data Scientist</span>
   </h1>
 
   <div id="hero-bio" class="flex flex-column mw6" style="gap: 1rem;">
