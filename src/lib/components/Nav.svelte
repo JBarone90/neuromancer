@@ -4,7 +4,8 @@
 
 	const navLinks: { label: string; href: string; anchor: boolean }[] = [
 		{ label: 'Home', href: '/', anchor: false },
-		{ label: 'Projects', href: '#projects', anchor: true },
+		{ label: 'Projects', href: '/#projects', anchor: false },
+		{ label: 'Writing', href: '/writing/', anchor: false },
 	];
 </script>
 
