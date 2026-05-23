@@ -4,7 +4,14 @@
 </script>
 
 <svelte:head>
-	<title>Jacopo Barone - Data Scientist</title>
+	<title>Jacopo Barone — Data Scientist</title>
+	<meta name="description" content="Data Scientist working for the UK government, focused on containerised trade. Background in cognitive neuroscience and PhD in neuroimaging." />
+	<meta property="og:title" content="Jacopo Barone — Data Scientist" />
+	<meta property="og:description" content="Data Scientist working for the UK government, focused on containerised trade. Background in cognitive neuroscience and PhD in neuroimaging." />
+	<meta property="og:type" content="website" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Jacopo Barone — Data Scientist" />
+	<meta name="twitter:description" content="Data Scientist working for the UK government, focused on containerised trade. Background in cognitive neuroscience and PhD in neuroimaging." />
 </svelte:head>
 
 <section class="flex flex-column" style="gap: 3rem;">
