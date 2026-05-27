@@ -1,29 +1,50 @@
 <script lang="ts">
   import ProjectCard from "$lib/components/ProjectCard.svelte";
+  import OscillationWave from "$lib/components/OscillationWave.svelte";
+  import SpikyRule from "$lib/components/SpikyRule.svelte";
   import { projects } from "$lib/content/projects";
   import gsap from "gsap";
-  import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 
-  gsap.registerPlugin(ScrambleTextPlugin);
+  const roles = ["Data Scientist", "Neuroscientist"];
 
   function animateHero(node: HTMLElement) {
+    let roleIndex = 0;
+    let cycleTimeline: gsap.core.Timeline | null = null;
+    let pending: gsap.core.Tween | null = null;
+
     const mm = gsap.matchMedia();
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       const ctx = gsap.context(() => {
         const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-        tl.to(
-          "#hero-name-text",
-          {
-            duration: 1.5,
-            scrambleText: { text: "Jacopo Barone", chars: "01", speed: 0.3 },
-          },
-          0.1,
-        )
-          .from("#hero-subtitle", { opacity: 0, duration: 0.3 }, "-=0.1")
-          .from("#hero-bio", { opacity: 0, y: 8, duration: 0.5 }, "-=0.1")
-          .from("#hero-cta", { opacity: 0, y: 6, duration: 0.4 }, "-=0.25");
+        tl.from("#hero-name-text", { opacity: 0, y: 14, duration: 0.7 }, 0.1)
+          .from("#hero-subtitle",  { opacity: 0, duration: 0.4 }, "-=0.2")
+          .from(".wave-container",  { opacity: 0, duration: 0.6 }, "-=0.1")
+          .from("#hero-bio",        { opacity: 0, y: 8,  duration: 0.5 }, "-=0.2")
+          .from("#hero-cta",        { opacity: 0, y: 6,  duration: 0.4 }, "-=0.25")
+          .call(scheduleNext);
       }, node);
-      return () => ctx.revert();
+
+      function scheduleNext() {
+        pending = gsap.delayedCall(2.5, cycleRole);
+      }
+
+      function cycleRole() {
+        const el = node.querySelector<HTMLElement>("#hero-subtitle");
+        if (!el) return;
+        const next = (roleIndex + 1) % roles.length;
+        cycleTimeline = gsap.timeline({ onComplete: scheduleNext });
+        cycleTimeline
+          .to(el, { y: "100%", duration: 0.35, ease: "power2.in" })
+          .call(() => { el.textContent = roles[next]; roleIndex = next; })
+          .set(el, { y: "-100%" })
+          .to(el, { y: "0%", duration: 0.35, ease: "power2.out" });
+      }
+
+      return () => {
+        ctx.revert();
+        cycleTimeline?.kill();
+        pending?.kill();
+      };
     });
     return () => mm.revert();
   }
@@ -49,18 +70,22 @@
   />
 </svelte:head>
 
-<section class="flex flex-column" style="gap: 3rem;" {@attach animateHero}>
+<section class="flex flex-column" style="gap: 2rem;" {@attach animateHero}>
   <h1
     id="hero-name"
     class="f1 fw7 lh-title ma0"
     style="font-size: clamp(2.5rem, 5vw, 3rem);"
-    aria-label="Jacopo Barone - Data Scientist"
+    aria-label="Jacopo Barone — Data Scientist · Neuroscientist"
   >
-    <span id="hero-name-text">Jacopo Barone</span><br />
-    <span id="hero-subtitle" class="db nowrap" style="font-size: 0.55em;"
-      >Data Scientist<span class="cursor" aria-hidden="true">|</span></span
-    >
+    <span id="hero-name-text" class="hero-name">Jacopo Barone</span><br />
+    <span class="role-clip" aria-live="polite" style="margin-top: 0.3em;">
+      <span id="hero-subtitle" class="db font-mono role-text" style="font-size: 0.45em; letter-spacing: 0.04em;">
+        Data Scientist
+      </span>
+    </span>
   </h1>
+
+  <OscillationWave />
 
   <div id="hero-bio" class="flex flex-column mw6" style="gap: 1rem;">
     <p class="f4 theme-muted ma0 lh-copy">
@@ -101,7 +126,7 @@
   <a
     id="hero-cta"
     href="#projects"
-    class="dib ba b--theme-border pv2 ph3 f6 theme-muted cta-link"
+    class="dib ba b--theme-border pv2 ph3 f6 theme-muted cta-link font-mono"
     style="align-self: flex-start;"
   >
     View projects →
@@ -113,9 +138,10 @@
   class="flex flex-column"
   style="gap: 2rem; padding-top: 5rem; padding-bottom: 3rem;"
 >
-  <h2 class="f3 fw6 ma0 font-mono">
-    <span class="theme-muted" aria-hidden="true">// </span>projects
-  </h2>
+  <div class="section-header">
+    <h2 class="f3 fw6 ma0 font-mono" style="white-space: nowrap;">projects</h2>
+    <SpikyRule />
+  </div>
   <div class="projects-grid">
     {#each projects as project (project.title)}
       <ProjectCard {project} />
@@ -124,19 +150,35 @@
 </section>
 
 <style>
+  .hero-name {
+    font-family: var(--font-serif);
+  }
+
+  /* Clips the subtitle text during its roll-in / roll-out GSAP animation */
+  .role-clip {
+    display: block;
+    overflow: hidden;
+  }
+  .role-text {
+    display: block;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
   .social-icon-link {
     display: inline-flex;
     align-items: center;
     color: var(--color-accent);
     vertical-align: middle;
   }
-  .social-icon-link:hover {
-    opacity: 0.75;
-  }
+  .social-icon-link:hover { opacity: 0.75; }
+
   .cta-link {
-    transition:
-      color 0.2s ease,
-      border-color 0.2s ease;
+    transition: color 0.2s ease, border-color 0.2s ease;
   }
   .cta-link:hover {
     color: var(--color-text);
@@ -147,28 +189,5 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
-  }
-
-  .cursor {
-    display: inline-block;
-    margin-left: 2px;
-    color: var(--color-accent);
-    animation: blink 1s step-end infinite;
-  }
-
-  @keyframes blink {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .cursor {
-      animation: none;
-    }
   }
 </style>
