@@ -49,3 +49,4 @@ svg {
 .font-mono { font-family: var(--font-mono); }
 .nav-h { height: var(--nav-height); }
 .pt-nav { padding-top: calc(var(--nav-height) + 2rem); }
+.nav-sticky { position: sticky; top: 0; }

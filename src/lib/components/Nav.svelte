@@ -9,15 +9,15 @@
 	];
 </script>
 
-<nav class="fixed top-0 left-0 right-0 z-999 bg-surface bb b--theme-border nav-h flex items-center">
+<nav class="nav-sticky z-999 bg-surface bb b--theme-border nav-h flex items-center">
 	<div class="mw8 center ph4 w-100 flex items-center justify-between">
 		<a class="font-mono theme-accent f5 f4-ns fw6 no-underline" href="{base}/">neuromancer</a>
-		<ul class="list pl0 ma0 dn flex-ns items-center">
+		<ul class="list pl0 ma0 flex items-center">
 			{#each navLinks as link (link.href)}
-				<li class="ml4">
+				<li class="ml3 ml4-ns">
 					<a
 						href={link.anchor ? link.href : `${base}${link.href}`}
-						class="theme-muted f6 f5-l no-underline nav-link"
+						class="theme-muted f7 f6-ns no-underline nav-link"
 						class:nav-active={!link.anchor && page.url.pathname === base + link.href}
 					>{link.label}</a>
 				</li>
