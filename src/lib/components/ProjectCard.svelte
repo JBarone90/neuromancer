@@ -7,7 +7,7 @@
 <article class="bg-surface ba b--theme-border pa4 flex flex-column project-card" style="gap: 1rem;">
 	<div class="flex items-baseline justify-between">
 		<h3 class="f5 fw6 ma0 font-mono">
-			<span class="theme-muted" aria-hidden="true">› </span><span class="theme-accent">{project.title}</span>
+			<span class="theme-muted" aria-hidden="true">› </span>{#if project.url}<a href={project.url} target="_blank" rel="noopener noreferrer" class="theme-accent project-title-link">{project.title}</a>{:else}<span class="theme-accent">{project.title}</span>{/if}
 		</h3>
 		{#if project.year}
 			<span class="f7 theme-muted font-mono ml3">{project.year}</span>
@@ -37,10 +37,12 @@
 	.project-card:hover {
 		border-color: var(--color-accent);
 	}
-	.project-link {
+	.project-link,
+	.project-title-link {
 		transition: opacity 0.15s ease;
 	}
-	.project-link:hover {
+	.project-link:hover,
+	.project-title-link:hover {
 		opacity: 0.75;
 	}
 </style>
