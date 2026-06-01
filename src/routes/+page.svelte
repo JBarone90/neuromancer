@@ -19,9 +19,13 @@
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       const ctx = gsap.context(() => {
         const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-        tl.from(["#hero-name-text", "#hero-bio", "#hero-cta"], { opacity: 0, y: 10, duration: 0.7 }, 0.1)
+        tl.from(
+          ["#hero-name-text", "#hero-bio", "#hero-cta"],
+          { opacity: 0, y: 10, duration: 0.7 },
+          0.1,
+        )
           .from("#hero-subtitle", { opacity: 0, duration: 0.7 }, 0.1)
-          .from(".wave-bleed",    { opacity: 0, duration: 0.9 }, 0.1)
+          .from(".wave-bleed", { opacity: 0, duration: 0.9 }, 0.1)
           .call(scheduleNext);
       }, node);
 
@@ -36,7 +40,10 @@
         cycleTimeline = gsap.timeline({ onComplete: scheduleNext });
         cycleTimeline
           .to(el, { y: "100%", duration: 0.35, ease: "power2.in" })
-          .call(() => { el.textContent = roles[next]; roleIndex = next; })
+          .call(() => {
+            el.textContent = roles[next];
+            roleIndex = next;
+          })
           .set(el, { y: "-100%" })
           .to(el, { y: "0%", duration: 0.35, ease: "power2.out" });
       }
@@ -59,8 +66,15 @@
 
         if (heading) {
           gsap.from(heading, {
-            opacity: 0, x: -12, duration: 0.5, ease: "power2.out",
-            scrollTrigger: { trigger: heading, start: "top 88%", toggleActions: "play none none reverse" },
+            opacity: 0,
+            x: -12,
+            duration: 0.5,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: heading,
+              start: "top 88%",
+              toggleActions: "play none none reverse",
+            },
           });
         }
 
@@ -69,11 +83,23 @@
           const tags = card.querySelectorAll("span.f7");
 
           const tl = gsap.timeline({
-            scrollTrigger: { trigger: card, start: "top 88%", toggleActions: "play none none reverse" },
+            scrollTrigger: {
+              trigger: card,
+              start: "top 88%",
+              toggleActions: "play none none reverse",
+            },
           });
 
-          tl.from(card, { opacity: 0, x: fromX, duration: 0.55, ease: "power2.out" })
-            .from(tags, { opacity: 0, stagger: 0.05, duration: 0.3, ease: "power1.out" }, "-=0.15");
+          tl.from(card, {
+            opacity: 0,
+            x: fromX,
+            duration: 0.55,
+            ease: "power2.out",
+          }).from(
+            tags,
+            { opacity: 0, stagger: 0.05, duration: 0.3, ease: "power1.out" },
+            "-=0.15",
+          );
         });
       }, node);
       return () => ctx.revert();
@@ -111,7 +137,11 @@
   >
     <span id="hero-name-text" class="hero-name">Jacopo Barone</span><br />
     <span class="role-clip" aria-live="polite" style="margin-top: 0.3em;">
-      <span id="hero-subtitle" class="db font-mono role-text" style="font-size: 0.45em; letter-spacing: 0.04em;">
+      <span
+        id="hero-subtitle"
+        class="db font-mono role-text"
+        style="font-size: 0.45em; letter-spacing: 0.04em;"
+      >
         Data Scientist
       </span>
     </span>
@@ -121,16 +151,16 @@
 
   <div id="hero-bio" class="flex flex-column mw6 bio-rule" style="gap: 1rem;">
     <p class="f5 f4-ns theme-muted ma0 lh-copy">
-      I'm a Data Scientist working for the UK government, currently focused on
-      containerised trade.
+      I'm a Data Scientist for the UK government, currently turning vessel
+      tracking data into insight on how goods move across the world's busiest
+      straits.
     </p>
     <p class="f5 f4-ns theme-muted ma0 lh-copy">
-      My background is in cognitive neuroscience and I hold a PhD in
-      neuroimaging, with research centred on neural oscillations in the motor
-      system.
+      Before data science, I was a neuroscientist. My PhD in neuroimaging
+      focused on neural oscillations and their role in the motor system.
     </p>
     <p class="f5 f4-ns theme-muted ma0 lh-copy">
-      I created this space to share my projects and ideas.
+      This is where I share what I'm building and thinking about.
     </p>
     <p class="f5 f4-ns theme-muted ma0 lh-copy">
       You can reach me on
@@ -151,7 +181,7 @@
             d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
           /></svg
         ></a
-      >.
+      >
     </p>
   </div>
 
@@ -172,7 +202,9 @@
   {@attach animateProjects}
 >
   <div class="section-header">
-    <h2 class="f4 f3-ns f2-l fw6 ma0 font-mono" style="white-space: nowrap;">projects</h2>
+    <h2 class="f4 f3-ns f2-l fw6 ma0 font-mono" style="white-space: nowrap;">
+      projects
+    </h2>
     <SpikyRule />
   </div>
   <div class="projects-grid">
@@ -213,10 +245,14 @@
     color: var(--color-accent);
     vertical-align: middle;
   }
-  .social-icon-link:hover { opacity: 0.75; }
+  .social-icon-link:hover {
+    opacity: 0.75;
+  }
 
   .cta-link {
-    transition: color 0.2s ease, border-color 0.2s ease;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
   }
   .cta-link:hover {
     color: var(--color-text);
