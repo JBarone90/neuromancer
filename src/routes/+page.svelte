@@ -4,6 +4,9 @@
   import SpikyRule from "$lib/components/SpikyRule.svelte";
   import { projects } from "$lib/content/projects";
   import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
 
   const roles = ["Data Scientist", "Neuroscientist"];
 
@@ -16,11 +19,9 @@
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       const ctx = gsap.context(() => {
         const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-        tl.from("#hero-name-text", { opacity: 0, y: 14, duration: 0.7 }, 0.1)
-          .from("#hero-subtitle",  { opacity: 0, duration: 0.4 }, "-=0.2")
-          .from(".wave-container",  { opacity: 0, duration: 0.6 }, "-=0.1")
-          .from("#hero-bio",        { opacity: 0, y: 8,  duration: 0.5 }, "-=0.2")
-          .from("#hero-cta",        { opacity: 0, y: 6,  duration: 0.4 }, "-=0.25")
+        tl.from(["#hero-name-text", "#hero-bio", "#hero-cta"], { opacity: 0, y: 10, duration: 0.7 }, 0.1)
+          .from("#hero-subtitle", { opacity: 0, duration: 0.7 }, 0.1)
+          .from(".wave-bleed",    { opacity: 0, duration: 0.9 }, 0.1)
           .call(scheduleNext);
       }, node);
 
@@ -45,6 +46,34 @@
         cycleTimeline?.kill();
         pending?.kill();
       };
+    });
+    return () => mm.revert();
+  }
+
+  function animateProjects(node: HTMLElement) {
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const heading = node.querySelector("h2");
+      const cards = node.querySelectorAll("article");
+
+      if (heading) {
+        gsap.from(heading, {
+          opacity: 0, x: -12, duration: 0.5, ease: "power2.out",
+          scrollTrigger: { trigger: heading, start: "top 88%", toggleActions: "play none none reverse" },
+        });
+      }
+
+      cards.forEach((card, i) => {
+        const fromX = i % 2 === 0 ? -30 : 30;
+        const tags = card.querySelectorAll("span.f7");
+
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: card, start: "top 88%", toggleActions: "play none none reverse" },
+        });
+
+        tl.from(card, { opacity: 0, x: fromX, duration: 0.55, ease: "power2.out" })
+          .from(tags, { opacity: 0, stagger: 0.05, duration: 0.3, ease: "power1.out" }, "-=0.15");
+      });
     });
     return () => mm.revert();
   }
@@ -87,7 +116,7 @@
 
   <OscillationWave />
 
-  <div id="hero-bio" class="flex flex-column mw6" style="gap: 1rem;">
+  <div id="hero-bio" class="flex flex-column mw6 bio-rule" style="gap: 1rem;">
     <p class="f5 f4-ns theme-muted ma0 lh-copy">
       I'm a Data Scientist working for the UK government, currently focused on
       containerised trade.
@@ -137,6 +166,7 @@
   id="projects"
   class="flex flex-column"
   style="gap: 2rem; padding-top: 5rem; padding-bottom: 3rem;"
+  {@attach animateProjects}
 >
   <div class="section-header">
     <h2 class="f4 f3-ns f2-l fw6 ma0 font-mono" style="white-space: nowrap;">projects</h2>
@@ -150,6 +180,11 @@
 </section>
 
 <style>
+  .bio-rule {
+    border-left: 2px solid var(--color-accent);
+    padding-left: 1.25rem;
+  }
+
   .hero-name {
     font-family: var(--font-serif);
   }
