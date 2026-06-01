@@ -216,23 +216,6 @@
 </section>
 
 <style>
-  /* Hidden until GSAP animates them in — prevents flash of pre-rendered content */
-  #hero-name-text,
-  #hero-bio,
-  #hero-cta,
-  #hero-subtitle {
-    opacity: 0;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    #hero-name-text,
-    #hero-bio,
-    #hero-cta,
-    #hero-subtitle {
-      opacity: 1;
-    }
-  }
-
   .bio-rule {
     border-left: 2px solid var(--color-accent);
     padding-left: 1.25rem;

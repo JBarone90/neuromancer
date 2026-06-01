@@ -43,6 +43,25 @@ svg {
 	max-width: 100%;
 }
 
+/* Hero elements start invisible; GSAP animates them in (prevents flash of pre-rendered content) */
+#hero-name-text,
+#hero-bio,
+#hero-cta,
+#hero-subtitle,
+.wave-bleed {
+	opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#hero-name-text,
+	#hero-bio,
+	#hero-cta,
+	#hero-subtitle,
+	.wave-bleed {
+		opacity: 1;
+	}
+}
+
 /* Dark-theme helpers Tachyons doesn't cover */
 .bg-surface { background-color: var(--color-surface); }
 .b--theme-border { border-color: var(--color-border); }
