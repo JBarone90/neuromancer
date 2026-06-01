@@ -2,9 +2,11 @@
 	import { onMount } from 'svelte';
 	import gsap from 'gsap';
 
-	const W = 1200;
-	const H = 80;
-	const STEPS = 160;
+	const REF_W = 1200; // reference width; frequency scaling is relative to this
+	const H = 120;
+
+	let containerW = $state(REF_W);
+	let waveBodyEl: HTMLDivElement;
 
 	type Band = {
 		freq: number; amp: number; color: string; opacity: number; strokeWidth: number;
@@ -13,25 +15,51 @@
 		phaseModFreq: number; phaseModDepth: number; phaseModOffset: number;
 	};
 
-	// Amplitude modulation: envelope = 1 + modDepth * sin(modFreq * t + modPhase)
-	// Phase modulation: phaseShift = phaseModDepth * sin(phaseModFreq * t + phaseModOffset)
-	// Higher-frequency bands carry more phase jitter, matching neural physiology.
+	// Six canonical EEG frequency bands.
+	// Visual freq values are scaled representations — actual physiological Hz
+	// (up to 150 Hz) are far too dense to render as individual cycles.
+	// Amplitude follows a 1/f power law: lower bands carry more energy.
+	// β is highlighted — the dominant motor-cortex rhythm.
 	const bands: Band[] = [
-		{ freq: 1, amp: 26, color: 'var(--color-text-muted)', opacity: 0.15, strokeWidth: 1,   phase: 0,   scrollSpeed: 0.50, modFreq: 0.29, modPhase: 0,   modDepth: 0.40, phaseModFreq: 0.13, phaseModDepth: 0.6,  phaseModOffset: 0 },
-		{ freq: 2, amp: 18, color: 'var(--color-text-muted)', opacity: 0.20, strokeWidth: 1,   phase: 1.1, scrollSpeed: 0.80, modFreq: 0.53, modPhase: 1.2, modDepth: 0.35, phaseModFreq: 0.21, phaseModDepth: 1.0,  phaseModOffset: 2.1 },
-		{ freq: 3, amp: 13, color: 'var(--color-text-muted)', opacity: 0.25, strokeWidth: 1,   phase: 2.3, scrollSpeed: 1.10, modFreq: 0.71, modPhase: 2.4, modDepth: 0.30, phaseModFreq: 0.27, phaseModDepth: 1.4,  phaseModOffset: 1.3 },
-		{ freq: 5, amp: 10, color: 'var(--color-accent)',     opacity: 0.75, strokeWidth: 1.5, phase: 0.7, scrollSpeed: 1.70, modFreq: 0.43, modPhase: 0.8, modDepth: 0.38, phaseModFreq: 0.19, phaseModDepth: 1.8,  phaseModOffset: 3.7 },
-		{ freq: 9, amp:  5, color: 'var(--color-text-muted)', opacity: 0.15, strokeWidth: 1,   phase: 1.8, scrollSpeed: 2.80, modFreq: 0.61, modPhase: 1.7, modDepth: 0.45, phaseModFreq: 0.37, phaseModDepth: 2.3,  phaseModOffset: 0.9 },
+		// δ (1–4 Hz)
+		{ freq: 1,  amp: 36, color: 'var(--color-text-muted)', opacity: 0.15, strokeWidth: 1,   phase: 0,   scrollSpeed: 0.40, modFreq: 0.29, modPhase: 0,   modDepth: 0.40, phaseModFreq: 0.13, phaseModDepth: 0.5,  phaseModOffset: 0 },
+		// θ (4–8 Hz)
+		{ freq: 2,  amp: 26, color: 'var(--color-text-muted)', opacity: 0.20, strokeWidth: 1,   phase: 1.1, scrollSpeed: 0.70, modFreq: 0.47, modPhase: 1.2, modDepth: 0.35, phaseModFreq: 0.19, phaseModDepth: 0.9,  phaseModOffset: 2.1 },
+		// α (8–12 Hz)
+		{ freq: 4,  amp: 18, color: 'var(--color-text-muted)', opacity: 0.25, strokeWidth: 1,   phase: 2.3, scrollSpeed: 1.10, modFreq: 0.63, modPhase: 2.4, modDepth: 0.30, phaseModFreq: 0.25, phaseModDepth: 1.3,  phaseModOffset: 1.3 },
+		// β (13–30 Hz) — highlighted: motor cortex signature
+		{ freq: 7,  amp: 13, color: 'var(--color-accent)',     opacity: 0.80, strokeWidth: 1.5, phase: 0.7, scrollSpeed: 1.80, modFreq: 0.43, modPhase: 0.8, modDepth: 0.38, phaseModFreq: 0.19, phaseModDepth: 1.7,  phaseModOffset: 3.7 },
+		// lγ (30–70 Hz)
+		{ freq: 12, amp:  8, color: 'var(--color-text-muted)', opacity: 0.18, strokeWidth: 1,   phase: 1.8, scrollSpeed: 2.80, modFreq: 0.57, modPhase: 1.7, modDepth: 0.42, phaseModFreq: 0.33, phaseModDepth: 2.2,  phaseModOffset: 0.9 },
+		// hγ (70–150 Hz) — fast ripples, low amplitude
+		{ freq: 18, amp:  5, color: 'var(--color-text-muted)', opacity: 0.12, strokeWidth: 0.8, phase: 3.1, scrollSpeed: 4.00, modFreq: 0.81, modPhase: 3.0, modDepth: 0.45, phaseModFreq: 0.51, phaseModDepth: 2.8,  phaseModOffset: 5.2 },
 	];
 
+	// Left margin: band names. Right margin: physiological frequency ranges.
+	// β shares the accent colour to echo the highlighted wave.
+	const bandMeta = [
+		{ label: 'δ',  range: '1–4',    color: 'var(--color-text-muted)' },
+		{ label: 'θ',  range: '4–8',    color: 'var(--color-text-muted)' },
+		{ label: 'α',  range: '8–12',   color: 'var(--color-text-muted)' },
+		{ label: 'β',  range: '13–30',  color: 'var(--color-accent)'     },
+		{ label: 'lγ', range: '30–70',  color: 'var(--color-text-muted)' },
+		{ label: 'hγ', range: '70–150', color: 'var(--color-text-muted)' },
+	];
+
+	const timeTicks = Array.from({ length: 9 }, (_, i) => i);
+
 	function sinePath(b: Band, t: number): string {
+		// Scale frequency so pixel wavelength stays constant as containerW changes
+		const scaledFreq = b.freq * (containerW / REF_W);
+		// Adaptive steps: ~7 px per segment for smooth curves at any width
+		const steps = Math.ceil(containerW / 7);
 		const pts: string[] = [];
 		const phaseShift = b.phaseModDepth * Math.sin(b.phaseModFreq * t + b.phaseModOffset);
-		for (let i = 0; i <= STEPS; i++) {
-			const xt = i / STEPS;
-			const x = xt * W;
+		for (let i = 0; i <= steps; i++) {
+			const xt = i / steps;
+			const x = xt * containerW;
 			const envelope = 1 + b.modDepth * Math.sin(b.modFreq * t + b.modPhase);
-			const y = H / 2 + b.amp * envelope * Math.sin(2 * Math.PI * b.freq * xt + b.phase + b.scrollSpeed * t + phaseShift);
+			const y = H / 2 + b.amp * envelope * Math.sin(2 * Math.PI * scaledFreq * xt + b.phase + b.scrollSpeed * t + phaseShift);
 			pts.push(i === 0 ? `M ${x.toFixed(1)},${y.toFixed(2)}` : `L ${x.toFixed(1)},${y.toFixed(2)}`);
 		}
 		return pts.join(' ');
@@ -40,6 +68,13 @@
 	let pathEls: SVGPathElement[] = [];
 
 	onMount(() => {
+		containerW = waveBodyEl.getBoundingClientRect().width;
+
+		const ro = new ResizeObserver(entries => {
+			containerW = entries[0].contentRect.width;
+		});
+		ro.observe(waveBodyEl);
+
 		const mm = gsap.matchMedia();
 		mm.add('(prefers-reduced-motion: no-preference)', () => {
 			const t0 = gsap.ticker.time;
@@ -52,40 +87,181 @@
 			gsap.ticker.add(tick);
 			return () => gsap.ticker.remove(tick);
 		});
-		return () => mm.revert();
+
+		return () => {
+			ro.disconnect();
+			mm.revert();
+		};
 	});
 </script>
 
-<div class="wave-container" aria-hidden="true">
-	<svg
-		viewBox="0 0 {W} {H}"
-		preserveAspectRatio="none"
-		xmlns="http://www.w3.org/2000/svg"
-		class="wave-svg"
-	>
-		{#each bands as band, i (i)}
-			<path
-				bind:this={pathEls[i]}
-				d={sinePath(band, 0)}
-				fill="none"
-				stroke={band.color}
-				stroke-width={band.strokeWidth}
-				stroke-opacity={band.opacity}
+<div class="wave-bleed" aria-hidden="true">
+	<div class="wave-body" bind:this={waveBodyEl}>
+
+		<!-- Left margin: frequency band names -->
+		<div class="margin margin-l">
+			{#each bandMeta as { label, color }, i (i)}
+				<span
+					class="band-lbl"
+					style="top: {10 + (i / (bandMeta.length - 1)) * 80}%; color: {color};"
+				>{label}</span>
+			{/each}
+			<div class="rule rule-r"></div>
+		</div>
+
+		<svg
+			viewBox="0 0 {containerW} {H}"
+			preserveAspectRatio="none"
+			xmlns="http://www.w3.org/2000/svg"
+			class="wave-svg"
+		>
+			<line
+				x1="0" y1={H / 2} x2={containerW} y2={H / 2}
+				stroke="var(--color-border)"
+				stroke-width="0.5"
+				stroke-opacity="0.5"
 			/>
+			{#each bands as band, i (i)}
+				<path
+					bind:this={pathEls[i]}
+					d={sinePath(band, 0)}
+					fill="none"
+					stroke={band.color}
+					stroke-width={band.strokeWidth}
+					stroke-opacity={band.opacity}
+				/>
+			{/each}
+		</svg>
+
+		<!-- Right margin: physiological frequency ranges in Hz -->
+		<div class="margin margin-r">
+			<div class="rule rule-l"></div>
+			{#each bandMeta as { range, color }, i (i)}
+				<span
+					class="freq-lbl"
+					style="top: {10 + (i / (bandMeta.length - 1)) * 80}%; color: {color};"
+				>{range} Hz</span>
+			{/each}
+		</div>
+
+	</div>
+
+	<!-- Time axis -->
+	<div class="time-row">
+		{#each timeTicks as t (t)}
+			<div class="ttick" style="left: {(t / (timeTicks.length - 1)) * 100}%">
+				<div class="ttick-line"></div>
+				<span class="ttick-text">{t} s</span>
+			</div>
 		{/each}
-	</svg>
+	</div>
 </div>
 
 <style>
-	.wave-container {
-		width: 100%;
-		overflow: hidden;
-		height: 80px;
+	/* Full-bleed breakout from the centred mw8 container */
+	.wave-bleed {
+		width: 100vw;
+		margin-left: calc(50% - 50vw);
+	}
+
+	.wave-body {
+		position: relative;
+		height: 120px;
 	}
 
 	.wave-svg {
 		width: 100%;
 		height: 100%;
 		display: block;
+	}
+
+	/* Margin annotation panels — hidden below 1280px */
+	.margin {
+		position: absolute;
+		top: 0;
+		height: 100%;
+		display: none;
+	}
+
+	/* 30rem = half content width (64rem mw8 − 4rem ph4 = 60rem → half = 30rem).
+	   Aligns the boundary rule with the actual text edge. */
+	.margin-l {
+		left: 0;
+		right: calc(50% + 30rem);
+	}
+
+	.margin-r {
+		left: calc(50% + 30rem);
+		right: 0;
+	}
+
+	/* Thin vertical rule at the content boundary */
+	.rule {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 1px;
+		background: var(--color-border);
+		opacity: 0.45;
+	}
+	.rule-r { right: 0; }
+	.rule-l { left: 0; }
+
+	/* Band name labels (left) */
+	.band-lbl {
+		position: absolute;
+		right: 0.8rem;
+		transform: translateY(-50%);
+		font-family: var(--font-mono);
+		font-size: 11px;
+		opacity: 0.55;
+		user-select: none;
+	}
+
+	/* Frequency range labels (right) */
+	.freq-lbl {
+		position: absolute;
+		left: 0.8rem;
+		transform: translateY(-50%);
+		font-family: var(--font-mono);
+		font-size: 10px;
+		opacity: 0.5;
+		user-select: none;
+	}
+
+	/* Time axis */
+	.time-row {
+		position: relative;
+		height: 20px;
+	}
+
+	.ttick {
+		position: absolute;
+		transform: translateX(-50%);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 2px;
+	}
+
+	.ttick-line {
+		width: 1px;
+		height: 4px;
+		background: var(--color-border);
+		opacity: 0.5;
+	}
+
+	.ttick-text {
+		font-family: var(--font-mono);
+		font-size: 8px;
+		color: var(--color-text-muted);
+		opacity: 0.35;
+		letter-spacing: 0.04em;
+	}
+
+	@media (min-width: 1280px) {
+		.margin {
+			display: block;
+		}
 	}
 </style>

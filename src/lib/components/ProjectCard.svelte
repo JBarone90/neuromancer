@@ -6,14 +6,14 @@
 
 <article class="bg-surface ba b--theme-border pa4 flex flex-column project-card" style="gap: 1rem;">
 	<div class="flex items-baseline justify-between">
-		<h3 class="f5 fw6 ma0 font-mono">
+		<h3 class="f5 f4-ns fw6 ma0 font-mono">
 			<span class="theme-muted" aria-hidden="true">› </span>{#if project.url}<a href={project.url} target="_blank" rel="noopener noreferrer" class="theme-accent project-title-link">{project.title}</a>{:else}<span class="theme-accent">{project.title}</span>{/if}
 		</h3>
 		{#if project.year}
 			<span class="f7 theme-muted font-mono ml3">{project.year}</span>
 		{/if}
 	</div>
-	<p class="f6 theme-muted ma0 lh-copy" style="flex: 1;">{project.description}</p>
+	<p class="f6 f5-ns theme-muted ma0 lh-copy" style="flex: 1;">{project.description}</p>
 	<div class="flex flex-wrap" style="gap: 0.4rem;">
 		{#each project.tags as tag (tag)}
 			<span class="f7 font-mono ba b--theme-border pv1 ph2 theme-muted">{tag}</span>

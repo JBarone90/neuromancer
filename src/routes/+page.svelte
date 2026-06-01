@@ -74,7 +74,7 @@
   <h1
     id="hero-name"
     class="f1 fw7 lh-title ma0"
-    style="font-size: clamp(2.5rem, 5vw, 3rem);"
+    style="font-size: clamp(1.8rem, 5vw, 4rem);"
     aria-label="Jacopo Barone — Data Scientist · Neuroscientist"
   >
     <span id="hero-name-text" class="hero-name">Jacopo Barone</span><br />
@@ -88,19 +88,19 @@
   <OscillationWave />
 
   <div id="hero-bio" class="flex flex-column mw6" style="gap: 1rem;">
-    <p class="f4 theme-muted ma0 lh-copy">
+    <p class="f5 f4-ns theme-muted ma0 lh-copy">
       I'm a Data Scientist working for the UK government, currently focused on
       containerised trade.
     </p>
-    <p class="f4 theme-muted ma0 lh-copy">
+    <p class="f5 f4-ns theme-muted ma0 lh-copy">
       My background is in cognitive neuroscience and I hold a PhD in
       neuroimaging, with research centred on neural oscillations in the motor
       system.
     </p>
-    <p class="f4 theme-muted ma0 lh-copy">
+    <p class="f5 f4-ns theme-muted ma0 lh-copy">
       I created this space to share my projects and ideas.
     </p>
-    <p class="f4 theme-muted ma0 lh-copy">
+    <p class="f5 f4-ns theme-muted ma0 lh-copy">
       You can reach me on
       <a
         href="https://www.linkedin.com/in/baronej/"
@@ -126,7 +126,7 @@
   <a
     id="hero-cta"
     href="#projects"
-    class="dib ba b--theme-border pv2 ph3 f6 theme-muted cta-link font-mono"
+    class="dib ba b--theme-border pv2 ph3 f6 f5-ns theme-muted cta-link font-mono"
     style="align-self: flex-start;"
   >
     View projects →
@@ -139,7 +139,7 @@
   style="gap: 2rem; padding-top: 5rem; padding-bottom: 3rem;"
 >
   <div class="section-header">
-    <h2 class="f3 fw6 ma0 font-mono" style="white-space: nowrap;">projects</h2>
+    <h2 class="f4 f3-ns f2-l fw6 ma0 font-mono" style="white-space: nowrap;">projects</h2>
     <SpikyRule />
   </div>
   <div class="projects-grid">

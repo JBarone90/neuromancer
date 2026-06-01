@@ -12,6 +12,7 @@
 
 html {
 	cursor: default;
+	overflow-x: clip;
 	font-family: 'IBM Plex Mono', monospace;
 	background-color: var(--color-bg);
 	background-image:
