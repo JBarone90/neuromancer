@@ -149,6 +149,13 @@
 	.wave-bleed {
 		width: 100vw;
 		margin-left: calc(50% - 50vw);
+		opacity: 0;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.wave-bleed {
+			opacity: 1;
+		}
 	}
 
 	.wave-body {

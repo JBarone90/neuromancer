@@ -19,13 +19,14 @@
     mm.add("(prefers-reduced-motion: no-preference)", () => {
       const ctx = gsap.context(() => {
         const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-        tl.from(
+        tl.fromTo(
           ["#hero-name-text", "#hero-bio", "#hero-cta"],
-          { opacity: 0, y: 10, duration: 0.7 },
+          { opacity: 0, y: 10 },
+          { opacity: 1, y: 0, duration: 0.7 },
           0.1,
         )
-          .from("#hero-subtitle", { opacity: 0, duration: 0.7 }, 0.1)
-          .from(".wave-bleed", { opacity: 0, duration: 0.9 }, 0.1)
+          .fromTo("#hero-subtitle", { opacity: 0 }, { opacity: 1, duration: 0.7 }, 0.1)
+          .fromTo(".wave-bleed", { opacity: 0 }, { opacity: 1, duration: 0.9 }, 0.1)
           .call(scheduleNext);
       }, node);
 
@@ -215,6 +216,23 @@
 </section>
 
 <style>
+  /* Hidden until GSAP animates them in — prevents flash of pre-rendered content */
+  #hero-name-text,
+  #hero-bio,
+  #hero-cta,
+  #hero-subtitle {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #hero-name-text,
+    #hero-bio,
+    #hero-cta,
+    #hero-subtitle {
+      opacity: 1;
+    }
+  }
+
   .bio-rule {
     border-left: 2px solid var(--color-accent);
     padding-left: 1.25rem;
