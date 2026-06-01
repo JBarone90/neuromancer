@@ -53,27 +53,30 @@
   function animateProjects(node: HTMLElement) {
     const mm = gsap.matchMedia();
     mm.add("(prefers-reduced-motion: no-preference)", () => {
-      const heading = node.querySelector("h2");
-      const cards = node.querySelectorAll("article");
+      const ctx = gsap.context(() => {
+        const heading = node.querySelector("h2");
+        const cards = node.querySelectorAll("article");
 
-      if (heading) {
-        gsap.from(heading, {
-          opacity: 0, x: -12, duration: 0.5, ease: "power2.out",
-          scrollTrigger: { trigger: heading, start: "top 88%", toggleActions: "play none none reverse" },
+        if (heading) {
+          gsap.from(heading, {
+            opacity: 0, x: -12, duration: 0.5, ease: "power2.out",
+            scrollTrigger: { trigger: heading, start: "top 88%", toggleActions: "play none none reverse" },
+          });
+        }
+
+        cards.forEach((card, i) => {
+          const fromX = i % 2 === 0 ? -30 : 30;
+          const tags = card.querySelectorAll("span.f7");
+
+          const tl = gsap.timeline({
+            scrollTrigger: { trigger: card, start: "top 88%", toggleActions: "play none none reverse" },
+          });
+
+          tl.from(card, { opacity: 0, x: fromX, duration: 0.55, ease: "power2.out" })
+            .from(tags, { opacity: 0, stagger: 0.05, duration: 0.3, ease: "power1.out" }, "-=0.15");
         });
-      }
-
-      cards.forEach((card, i) => {
-        const fromX = i % 2 === 0 ? -30 : 30;
-        const tags = card.querySelectorAll("span.f7");
-
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: card, start: "top 88%", toggleActions: "play none none reverse" },
-        });
-
-        tl.from(card, { opacity: 0, x: fromX, duration: 0.55, ease: "power2.out" })
-          .from(tags, { opacity: 0, stagger: 0.05, duration: 0.3, ease: "power1.out" }, "-=0.15");
-      });
+      }, node);
+      return () => ctx.revert();
     });
     return () => mm.revert();
   }
