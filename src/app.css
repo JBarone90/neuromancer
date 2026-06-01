@@ -5,7 +5,7 @@
 	--color-text: #e2e2e2;
 	--color-text-muted: #777;
 	--color-accent: #00d4aa;
-	--font-mono: 'IBM Plex Mono', monospace;
+	--font-mono: 'IBM Plex Mono', 'Cascadia Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
 	--font-serif: 'Cormorant Garamond', serif;
 	--nav-height: 60px;
 }
