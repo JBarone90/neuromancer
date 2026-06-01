@@ -1,6 +1,11 @@
 <script lang="ts">
 	import 'tachyons/css/tachyons.css';
 	import '../app.css';
+	import '@fontsource/ibm-plex-mono/400.css';
+	import '@fontsource/ibm-plex-mono/400-italic.css';
+	import '@fontsource/ibm-plex-mono/500.css';
+	import '@fontsource/ibm-plex-mono/600.css';
+	import '@fontsource/cormorant-garamond/700.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import Nav from '$lib/components/Nav.svelte';
 	import Footer from '$lib/components/Footer.svelte';
@@ -10,9 +15,6 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-	<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet" />
 </svelte:head>
 
 <Nav />
